@@ -31,7 +31,7 @@ export const Header = ({ title }) => <h1>{title}</h1>
 
 export const Button = ({ onClick, text }) => <button onClick={onClick}>{text}</button>
 
-export const Content = ({ feedback, value }) => <p>{feedback} {value}</p>
+export const StatisticLine = ({ text, value }) => <p>{text} {value}</p>
 
 export const Statistics = ({ good, neutral, bad, all, average, positive}) => {
   if ( all === 0) {
@@ -42,12 +42,12 @@ export const Statistics = ({ good, neutral, bad, all, average, positive}) => {
 
   return (
     <div>
-      <Content feedback={"good"} value={good} />
-      <Content feedback={"neutral"} value={neutral} />
-      <Content feedback={"bad"} value={bad} />
-      <Content feedback={"all"} value={all} />
-      <Content feedback={"average"} value={average} />
-      <Content feedback={"positive"} value={positive} />
+      <StatisticLine text="good" value={good} />
+      <StatisticLine text="neutral" value={neutral} />
+      <StatisticLine text="bad" value={bad} />
+      <StatisticLine text="all" value={all} />
+      <StatisticLine text="average" value={average} />
+      <StatisticLine text="positive" value={positive} />
     </div>
   )
 }
