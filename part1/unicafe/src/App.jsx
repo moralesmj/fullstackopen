@@ -33,7 +33,13 @@ export const Button = ({ onClick, text }) => <button onClick={onClick}>{text}</b
 
 export const Content = ({ feedback, value }) => <p>{feedback} {value}</p>
 
-const Statistics = ({ good, neutral, bad, all, average, positive}) => {
+export const Statistics = ({ good, neutral, bad, all, average, positive}) => {
+  if ( all === 0) {
+    return (
+      <p>No feedback given</p>
+    )
+  }
+
   return (
     <div>
       <Content feedback={"good"} value={good} />
