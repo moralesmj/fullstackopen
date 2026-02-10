@@ -1,8 +1,11 @@
-const Filter = ({ term, handleTermChange }) =>
-    <div>
-        filter shown with <input
-            value={term}
-            onChange={handleTermChange} />
-    </div>
+const Filter = ({ term, handleTermChange }) => {
+    return (
+        <div>
+            filter shown with <input
+                value={term}
+                onChange={handleTermChange} />
+        </div>
+    )
+}
 
 export default Filter
