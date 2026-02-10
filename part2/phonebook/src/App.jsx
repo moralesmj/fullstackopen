@@ -17,24 +17,44 @@ const App = () => {
       .then(response =>
         setPersons(response.data))
   }, [])
-  console.log('render', persons.length, 'persons')
 
   const addPerson = (event) => {
     event.preventDefault()
 
-    const personObject = {
-      name: newName,
-      number: newNumber,
-      id: String(persons.length + 1),
-    }
-
-    const exists = persons.some(person =>
-      person.name === newName
+    const exists = persons.find(
+      person => person.name === newName
     )
 
     if (exists) {
-      alert(`${newName} is already added to phonebook`)
+      if (window.confirm(
+        `${newName} is already added to phonebook, replace the old number with a new one?`
+      )) {
+        const updatedPerson = {
+          ...exists,
+          number: newNumber
+        }
+
+        personService
+          .update(exists.id, updatedPerson)
+          .then(response => {
+            setPersons(
+              persons.map(person =>
+                person.id !== exists.id
+                  ? person
+                  : response.data
+              )
+            )
+            setNewName('')
+            setNewNumber('')
+          })
+      }
     } else {
+      const personObject = {
+        name: newName,
+        number: newNumber,
+        id: String(persons.length + 1),
+      }
+
       personService
         .create(personObject)
         .then(response => {
@@ -47,13 +67,13 @@ const App = () => {
 
   const removePerson = (id, name) => {
     if (window.confirm(`Delete ${name} ?`)) {
-      
-    personService
-      .remove(id)
-      .then(() => {
-        setPersons(persons.filter(person => person.id !== id))
-      })
-  }
+
+      personService
+        .remove(id)
+        .then(() => {
+          setPersons(persons.filter(person => person.id !== id))
+        })
+    }
   }
 
   const filterNames = persons.filter(person =>
