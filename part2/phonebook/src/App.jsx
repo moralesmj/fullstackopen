@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import axios from 'axios'
+import personService from './services/persons'
 import Title from './components/Title'
 import Form from './components/Form'
 import Content from './components/Content'
@@ -12,13 +12,10 @@ const App = () => {
   const [term, setTerm] = useState('')
 
   useEffect(() => {
-    console.log('effect')
-    axios
-      .get('http://localhost:3001/persons')
-      .then((response) => {
-        console.log('promise fulfilled')
-        setPersons(response.data)
-      })
+    personService
+      .getAll()
+      .then(response =>
+        setPersons(response.data))
   }, [])
   console.log('render', persons.length, 'persons')
 
@@ -38,9 +35,13 @@ const App = () => {
     if (exists) {
       alert(`${newName} is already added to phonebook`)
     } else {
-      setPersons(persons.concat(personObject))
-      setNewName('')
-      setNewNumber('')
+      personService
+        .create(personObject)
+        .then(response => {
+          setPersons(persons.concat(response.data))
+          setNewName('')
+          setNewNumber('')
+        })
     }
   }
 
