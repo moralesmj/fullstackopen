@@ -11,7 +11,7 @@ const App = () => {
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [term, setTerm] = useState('')
-  const [errorMessage, setErrorMessage] = useState(null)
+  const [notification, setNotification] = useState({ message: null, type: null })
 
   useEffect(() => {
     personService
@@ -46,8 +46,28 @@ const App = () => {
                   : response.data
               )
             )
+            setNotification({
+              message: `Updated ${response.data.name} number`,
+              type: 'success'
+            })
+            setTimeout(() => {
+              setNotification({ message: null, type: null })
+            }, 5000)
             setNewName('')
             setNewNumber('')
+          })
+          .catch(error => {
+            setNotification({
+              message: `Information of ${exists.name} has already been removed from server`,
+              type: 'error'
+            })
+            setTimeout(() => {
+              setNotification({ message: null, type: null })
+            }, 5000)
+            setPersons(
+              persons.filter(person =>
+                person.id !== exists.id)
+            )
           })
       }
     } else {
@@ -61,9 +81,12 @@ const App = () => {
         .create(personObject)
         .then(response => {
           setPersons(persons.concat(response.data))
-          setErrorMessage(`Added ${newName}`)
+          setNotification({
+            message: `Added ${response.data.name}`,
+            type: 'success'
+          })
           setTimeout(() => {
-            setErrorMessage(null)
+            setNotification({ message: null, type: null })
           }, 5000)
           setNewName('')
           setNewNumber('')
@@ -101,7 +124,7 @@ const App = () => {
   return (
     <div>
       <Title title={'Phonebook'} />
-      <Notification message={errorMessage} />
+      <Notification notification={notification} />
       <Filter term={term} handleTermChange={handleTermChange} />
 
       <Title title={'add a new'} />
