@@ -4,7 +4,7 @@ const app = express()
 const getRandomIntInclusive = (min, max) => {
     const minCeiled = Math.ceil(min);
     const maxFloored = Math.floor(max);
-    return Math.floor(Math.random() * (maxFloored - minCeiled + 1) + minCeiled);
+    return String(Math.floor(Math.random() * (maxFloored - minCeiled + 1) + minCeiled))
 }
 
 let persons = [
@@ -56,6 +56,7 @@ app.delete('/api/persons/:id', (request, response) => {
 
 app.post('/api/persons', (request, response) => {
     const body = request.body
+    const names = persons.find(person => person.name === body.name)
 
     if (!body.name) {
         return response.status(400).json({
@@ -64,6 +65,10 @@ app.post('/api/persons', (request, response) => {
     } else if (!body.number) {
         return response.status(400).json({
             error: 'number missing'
+        })
+    } else if (names) {
+        return response.status(400).json({
+            error: 'name must be unique'
         })
     }
 
