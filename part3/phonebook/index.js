@@ -1,6 +1,12 @@
 const express = require('express')
 const app = express()
 
+const getRandomIntInclusive = (min, max) => {
+    const minCeiled = Math.ceil(min);
+    const maxFloored = Math.floor(max);
+    return Math.floor(Math.random() * (maxFloored - minCeiled + 1) + minCeiled);
+}
+
 let persons = [
     {
         "id": "1",
@@ -46,6 +52,30 @@ app.delete('/api/persons/:id', (request, response) => {
     persons = persons.filter(person => person.id !== id)
 
     response.status(204).end()
+})
+
+app.post('/api/persons', (request, response) => {
+    const body = request.body
+
+    if (!body.name) {
+        return response.status(400).json({
+            error: 'name missing'
+        })
+    } else if (!body.number) {
+        return response.status(400).json({
+            error: 'number missing'
+        })
+    }
+
+    const person = {
+        id: getRandomIntInclusive(0, 100000),
+        name: body.name,
+        number: body.number
+    }
+
+    persons = persons.concat(person)
+
+    response.json(person)
 })
 
 app.get('/info', (request, response) => {
