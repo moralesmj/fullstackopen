@@ -9,6 +9,11 @@ const getRandomIntInclusive = (min, max) => {
     return String(Math.floor(Math.random() * (maxFloored - minCeiled + 1) + minCeiled))
 }
 
+morgan.token('body', function (req) {
+    return JSON.stringify(req.body)
+})
+
+
 let persons = [
     {
         "id": "1",
@@ -33,7 +38,7 @@ let persons = [
 ]
 
 app.use(express.json())
-app.use(morgan('tiny'))
+app.use(morgan(':method :url :status :res[content-length] - :response-time ms :body'))
 
 app.get('/api/persons', (request, response) => {
     response.json(persons)
