@@ -1,6 +1,5 @@
 const express = require('express')
 const morgan = require('morgan')
-const cors = require('cors')
 
 const app = express()
 
@@ -37,10 +36,13 @@ let persons = [
     }
 ]
 
+app.use(morgan(':method :url :status :res[content-length] - :response-time ms :body'))
 app.use(express.static('dist'))
 app.use(express.json())
-app.use(morgan(':method :url :status :res[content-length] - :response-time ms :body'))
-app.use(cors())
+
+app.get('/', (request, response) => {
+    response.send('<h1>Hello World!</h1>')
+})
 
 app.get('/api/persons', (request, response) => {
     response.json(persons)
