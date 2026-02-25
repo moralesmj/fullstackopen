@@ -47,7 +47,7 @@ app.get('/info', (request, response) => {
 
         response.send(`
             <div>
-                <p>Phonebook has info for ${count} people</p>
+                <p>Phonebook has information for ${count} people</p>
                 <p>${now}</p>
             </div>
         `)
