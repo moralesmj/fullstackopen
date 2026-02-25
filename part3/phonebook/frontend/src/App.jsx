@@ -73,8 +73,7 @@ const App = () => {
     } else {
       const personObject = {
         name: newName,
-        number: newNumber,
-        id: String(persons.length + 1),
+        number: newNumber
       }
 
       personService
@@ -90,6 +89,15 @@ const App = () => {
           }, 5000)
           setNewName('')
           setNewNumber('')
+        })
+        .catch(error => {
+          setNotification({
+            message: `${error.response.data.error}`,
+            type: 'error'
+          })
+          setTimeout(() => {
+            setNotification({ message: null, type: null })
+          }, 5000)
         })
     }
   }
